@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 
 // php artisan make:controller BookController --resource --model=Book
@@ -49,7 +50,6 @@ class BookController extends Controller
         }
 
         $book->save();
-        // TODO: Add route to book list menu.
         return redirect()->route('list');
     }
 
@@ -75,20 +75,21 @@ class BookController extends Controller
     public function update(Request $request, Book $book)
     {
         $request->validate([
-            'book_name' => ['required', 'unique:books'],
+            'book_name' => ['required', Rule::unique('books', 'book_name')->ignore($book->id)],
             'author' => 'required',
-            'image' => 'image|mimes:jpg,png,jpeg|max:10240', // max 10gb, default jpg, jpeg, png, bmp, gif, or webp
-            'isbn' => 'required|unique:books',
+            'image' => 'image|mimes:jpg,png,jpeg|max:1024', // max 1gb, default jpg, jpeg, png, bmp, gif, or webp
+            'isbn' => ['required', Rule::unique('books', 'isbn')->ignore($book->id)],
         ]);
 
-        $update_book = $request->all();
+        $update_book = $request->except(['image']);
 
         if($request->hasfile('image')) {
-            $image_path = $request->file('image')->store('images', 'public');
+            $update_book['image'] = $request->file('image')->store('images', 'public');
+        } else {
+            $update_book['image'] = null;
         }
 
         $book->update($update_book);
-        // TODO: Add route to book list menu.
         return redirect()->route('list');
     }
 
@@ -97,7 +98,7 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        // TODO: To delete add delete button to book card.
         $book->delete();
+        return redirect()->route('list');
     }
 }

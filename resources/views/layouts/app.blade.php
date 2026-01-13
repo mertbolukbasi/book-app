@@ -18,6 +18,9 @@
 </head>
 <body>
     <div id="app">
+        @if(!request()->routeIs('view.login', 'view.register'))
+            @include('layouts.navbar')
+        @endif
         <main class="py-4">
             @yield('content')
         </main>
