@@ -22,7 +22,7 @@
                                 <a href="{{ route('books.edit', $book->id) }}" class="btn btn-primary">Update</a>
                             </div>
 
-                            <div class="modal fade" id="delete{{ $book->id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal fade" id="deleteModal{{ $book->id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
                                         <div class="modal-header">
