@@ -11,7 +11,6 @@
                 <form action="{{ route('books.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
-
                     <div class="mb-3">
                         <label for="book_name" class="form-label">Book Name</label>
                         <input type="text" class="form-control @error('book_name') is-invalid @enderror" id="book_name" name="book_name" value="{{ old('book_name') }}" required>
@@ -21,9 +20,9 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="author" class="form-label">Author</label>
-                        <input type="text" class="form-control @error('author') is-invalid @enderror" id="author" name="author" value="{{ old('author') }}" required>
-                        @error('author')
+                        <label for="author" class="form-label">Author Name</label>
+                        <input type="text" class="form-control @error('author_name') is-invalid @enderror" id="author" name="author_name" value="{{ old('author_name') }}" required placeholder="Type author name...">
+                        @error('author_name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -36,6 +35,34 @@
                         @enderror
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label d-block">Stores</label>
+                        
+                        <div class="card p-3 @error('bookstores') border-danger @enderror">
+                            @if($bookstores->isEmpty())
+                                <p class="text-muted small mb-0">No bookstores found in database.</p>
+                            @else
+                                <div class="d-flex flex-wrap gap-3">
+                                    @foreach($bookstores as $store)
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" 
+                                                   name="bookstores[]" 
+                                                   value="{{ $store->id }}" 
+                                                   id="store_{{ $store->id }}"
+                                                   {{ (is_array(old('bookstores')) && in_array($store->id, old('bookstores'))) ? 'checked' : '' }}
+                                            >
+                                            <label class="form-check-label" for="store_{{ $store->id }}">
+                                                {{ $store->name }}
+                                            </label>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
+                        @error('bookstores')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                    </div>
                     <div class="mb-3">
                         <label for="image" class="form-label">Image</label>
                         <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">

@@ -13,7 +13,10 @@
                         @endif
                         <div class="card-body">
                             <h5 class="card-title">{{ $book->book_name }}</h5>
-                            <p class="card-text">Author: {{ $book->author }}</p>
+                            <p class="card-text">Author: {{ $book->author->name }}</p>
+                            @foreach($book->bookstores as $stores)
+                                <p class="card-text">Author: {{ $stores->name }}</p>
+                            @endforeach
                             <p class="card-text"><small class="text-muted">ISBN: {{ $book->isbn }}</small></p>
                             <div class="d-flex justify-content-between">
                                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ $book->id }}">
