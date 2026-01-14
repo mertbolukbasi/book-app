@@ -36,7 +36,7 @@ class BookController extends Controller
             'book_name' => ['required', 'unique:books'],
             'author' => 'required',
             'image' => 'image|mimes:jpg,png,jpeg|max:10240', // max 10gb, default jpg, jpeg, png, bmp, gif, or webp
-            'isbn' => 'required|unique:books',
+            'isbn' => ['required', 'unique:books', 'regex:/^[0-9-]{10,17}$/'],
         ]);
 
         $book = new Book();
@@ -78,7 +78,7 @@ class BookController extends Controller
             'book_name' => ['required', Rule::unique('books', 'book_name')->ignore($book->id)],
             'author' => 'required',
             'image' => 'image|mimes:jpg,png,jpeg|max:1024', // max 1gb, default jpg, jpeg, png, bmp, gif, or webp
-            'isbn' => ['required', Rule::unique('books', 'isbn')->ignore($book->id)],
+            'isbn' => ['required', Rule::unique('books', 'isbn')->ignore($book->id), 'regex:/^[0-9-]{10,17}$/'],
         ]);
 
         $update_book = $request->except(['image']);

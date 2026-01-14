@@ -4,7 +4,7 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-5"> <div class="card shadow-lg border-0 rounded-3">
-                    <div class="card-body p-5"> <h3 class="text-center fw-bold mb-4">Sign in</h3>
+                    <div class="card-body p-5"> <h3 class="text-center fw-bold mb-4">Sign up</h3>
 
                         @if ($errors->any())
                             <div class="alert alert-danger">
