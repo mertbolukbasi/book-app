@@ -21,7 +21,22 @@
 
                     <div class="mb-3">
                         <label for="author" class="form-label">Author Name</label>
-                        <input type="text" class="form-control @error('author_name') is-invalid @enderror" id="author" name="author_name" value="{{ old('author_name') }}" required placeholder="Type author name...">
+                        <input type="text" 
+                               class="form-control @error('author_name') is-invalid @enderror" 
+                               id="author" 
+                               name="author_name" 
+                               list="author_list" 
+                               value="{{ old('author_name') }}" 
+                               required 
+                               autocomplete="off" 
+                               placeholder="Search author">
+                        
+                        <datalist id="author_list">
+                            @foreach($authors as $auth)
+                                <option value="{{ $auth->name }}">
+                            @endforeach
+                        </datalist>
+
                         @error('author_name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -63,6 +78,7 @@
                             <div class="text-danger small mt-1">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="mb-3">
                         <label for="image" class="form-label">Image</label>
                         <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">

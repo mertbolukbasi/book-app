@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAuthorRequest;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Bookstore;
@@ -27,17 +28,17 @@ class BookController extends Controller
     public function create()
     {
         $bookstores = Bookstore::all();
-        return view('create', compact('bookstores'));
+        $authors = Author::all();
+        return view('create', compact('bookstores', 'authors'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreAuthorRequest $request)
     {
         $request->validate([
             'book_name' => ['required', 'unique:books'],
-            'author_name' => ['required', 'string'],
             'bookstores' => 'array',
             'image' => 'image|mimes:jpg,png,jpeg|max:10240', // max 10gb, default jpg, jpeg, png, bmp, gif, or webp
             'isbn' => ['required', 'unique:books', 'regex:/^[0-9-]{10,17}$/'],
@@ -77,17 +78,17 @@ class BookController extends Controller
     public function edit(Book $book)
     {
         $bookstores = Bookstore::all();
-        return view('edit', compact('book', 'bookstores'));
+        $authors = Author::all();
+        return view('edit', compact('book', 'bookstores', 'authors'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Book $book)
+    public function update(StoreAuthorRequest $request, Book $book)
     {
         $request->validate([
             'book_name' => ['required', Rule::unique('books', 'book_name')->ignore($book->id)],
-            'author_name' => ['required', 'string'],
             'bookstores' => 'array',
             'image' => 'image|mimes:jpg,png,jpeg|max:1024', // max 1gb, default jpg, jpeg, png, bmp, gif, or webp
             'isbn' => ['required', Rule::unique('books', 'isbn')->ignore($book->id), 'regex:/^[0-9-]{10,17}$/'],
@@ -97,7 +98,9 @@ class BookController extends Controller
             ['name' => $request->author_name],
         );
 
-        $update_book = $request->except(['image']);
+        $book->book_name = $request->book_name;
+        $book->isbn = $request->isbn;
+        $book->author_id = $author->id;
 
         if ($request->hasfile('image')) {
             $update_book['image'] = $request->file('image')->store('images', 'public');
@@ -105,7 +108,7 @@ class BookController extends Controller
             $update_book['image'] = null;
         }
 
-        $book->update($update_book);
+        $book->save();
 
         $book->bookstores()->sync($request->bookstores);
         return redirect()->route('list');

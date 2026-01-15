@@ -19,8 +19,10 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         $this->call([
-            BookstoreSeeder::class
+            BookstoreSeeder::class,
+            AuthorSeeder::class
         ]);
+
 
         User::factory()->create([
             'name' => 'Test User',
