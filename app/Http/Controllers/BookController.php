@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\BookCreatedMail;
 use App\Http\Requests\StoreAuthorRequest;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Bookstore;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Storage;
 
@@ -61,6 +62,13 @@ class BookController extends Controller
         $book->save();
 
         $book->bookstores()->attach($request->bookstores);
+
+        $emails = $book->bookstores()->pluck('email')->toArray();
+
+        if (!empty($emails)) {
+            Mail::to($emails)->send(new BookCreatedMail($book));
+        }
+
         return redirect()->route('list');
     }
 
@@ -103,9 +111,10 @@ class BookController extends Controller
         $book->author_id = $author->id;
 
         if ($request->hasfile('image')) {
-            $update_book['image'] = $request->file('image')->store('images', 'public');
-        } else {
-            $update_book['image'] = null;
+            if ($book->image) {
+                Storage::disk('public')->delete($book->image);
+            }
+            $book->image = $request->file('image')->store('images', 'public');
         }
 
         $book->save();
@@ -119,7 +128,7 @@ class BookController extends Controller
      */
     public function destroy(Book $book)
     {
-        if($book->image) {
+        if ($book->image) {
             Storage::disk('public')->delete($book->image);
         }
         $book->delete();
