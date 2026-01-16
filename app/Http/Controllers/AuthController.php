@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-
     public function showLogin()
     {
         return view('login');
@@ -29,7 +28,7 @@ class AuthController extends Controller
 
         // Automatically remember the user
         // TODO: Remember me field can be added.
-        if(Auth::attempt($credentials, $request->remember)) {
+        if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
             return redirect()->intended('/');
         }

@@ -4,8 +4,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BookController;
 use Illuminate\Support\Facades\Route;
 
-
-
 Route::get("/", [BookController::class, "index"])->name("list");
 
 /*

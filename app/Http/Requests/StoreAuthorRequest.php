@@ -22,7 +22,7 @@ class StoreAuthorRequest extends FormRequest
                 ->squish() // delete space
                 ->title()
                 ->trim()
-                ->__toString()
+                ->__toString(),
         ]);
     }
 
@@ -34,7 +34,7 @@ class StoreAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'author_name' => ['required', 'string']
+            'author_name' => ['required', 'string'],
         ];
     }
 }

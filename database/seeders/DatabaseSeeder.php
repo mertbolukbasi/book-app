@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             BookstoreSeeder::class,
-            AuthorSeeder::class
+            AuthorSeeder::class,
         ]);
 
 

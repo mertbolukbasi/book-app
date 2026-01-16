@@ -6,7 +6,6 @@ use App\Models\Bookstore;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-
 // php artisan db:seed --class=BookstoreSeeder
 class BookstoreSeeder extends Seeder
 {
@@ -18,20 +17,20 @@ class BookstoreSeeder extends Seeder
         $stores = [
             [
                 'name' => 'D&R',
-                'email' => 'bolukbasmert@hotmail.com'
+                'email' => 'bolukbasmert@hotmail.com',
             ],
             [
                 'name' => 'Idefix',
-                'email' => 'bolukbasmertr2004@hotmail.com'
+                'email' => 'bolukbasmertr2004@hotmail.com',
             ],
             [
                 'name' => 'Hepsiburada',
-                'email' => 'mertbolukbasi144@hotmail.com'
+                'email' => 'mertbolukbasi144@hotmail.com',
             ],
             [
                 'name' => 'Kitapyurdu',
-                'email' => 'kaizenium@kaizeniumfoundation.com'
-            ]
+                'email' => 'kaizenium@kaizeniumfoundation.com',
+            ],
         ];
 
         foreach ($stores as $store) {

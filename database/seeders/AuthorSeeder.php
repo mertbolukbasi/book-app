@@ -17,10 +17,10 @@ class AuthorSeeder extends Seeder
             'Sabahattin Ali',
             'Yaşar Kemal',
             'Lev Tolstoy',
-            'George Orwell'
+            'George Orwell',
         ];
 
-        foreach($authors as $name) {
+        foreach ($authors as $name) {
             Author::firstOrCreate(
                 ['name' => $name]
             );

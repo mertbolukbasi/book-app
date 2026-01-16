@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Schema;
  * Book name, author, image, ISBN number.
  */
 
-return new class extends Migration
-{
-
+return new class extends Migration {
     // php artisan make:model Book -m
 
     /**

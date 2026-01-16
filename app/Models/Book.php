@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Book extends Model
 {
-
     public function author(): BelongsTo
     {
         return $this->belongsTo(Author::class);
@@ -24,6 +23,6 @@ class Book extends Model
         'book_name',
         'image',
         'isbn',
-        'author_id'
+        'author_id',
     ];
 }

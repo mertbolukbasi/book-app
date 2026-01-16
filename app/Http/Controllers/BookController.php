@@ -120,14 +120,14 @@ class BookController extends Controller
 
         $book->save();
 
-        $current_stores = $book->bookstores; 
+        $current_stores = $book->bookstores;
         $new_stores = collect($request->bookstores)->pluck('name');
         $removed_stores = $current_stores->whereNotIn('name', $new_stores);
         $added_stores = $new_stores->diff($current_stores);
 
         if ($removed_stores->isNotEmpty()) {
             foreach ($removed_stores as $store) {
-                Mail::to($store->email)->send(new BookDeletedMail($book)); 
+                Mail::to($store->email)->send(new BookDeletedMail($book));
             }
         }
 
@@ -137,10 +137,10 @@ class BookController extends Controller
             foreach ($added_stores_models as $added_stores_model) {
                 Mail::to($added_stores_model->email)->send(new BookCreatedMail($book));
             }
-        }   
+        }
 
         $book->bookstores()->sync($request->bookstores);
-        
+
         return redirect()->route('list');
     }
 
