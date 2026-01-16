@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\BookCreatedMail;
 use App\Http\Requests\StoreAuthorRequest;
+use App\Mail\BookDeletedMail;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Bookstore;
@@ -119,7 +120,27 @@ class BookController extends Controller
 
         $book->save();
 
+        $current_stores = $book->bookstores; 
+        $new_stores = collect($request->bookstores)->pluck('name');
+        $removed_stores = $current_stores->whereNotIn('name', $new_stores);
+        $added_stores = $new_stores->diff($current_stores);
+
+        if ($removed_stores->isNotEmpty()) {
+            foreach ($removed_stores as $store) {
+                Mail::to($store->email)->send(new BookDeletedMail($book)); 
+            }
+        }
+
+        if ($added_stores->isNotEmpty()) {
+            $added_stores_models = Bookstore::whereIn('name', $added_stores)->get();
+
+            foreach ($added_stores_models as $added_stores_model) {
+                Mail::to($added_stores_model->email)->send(new BookCreatedMail($book));
+            }
+        }   
+
         $book->bookstores()->sync($request->bookstores);
+        
         return redirect()->route('list');
     }
 
