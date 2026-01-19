@@ -8,6 +8,7 @@ use App\Mail\BookDeletedMail;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Bookstore;
+use App\Rules\IsbnRule;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Storage;
@@ -43,7 +44,7 @@ class BookController extends Controller
             'book_name' => ['required', 'unique:books', 'max:255'],
             'bookstores' => 'array',
             'image' => 'image|mimes:jpg,png,jpeg|max:10240', // max 10gb, default jpg, jpeg, png, bmp, gif, or webp
-            'isbn' => ['required', 'unique:books', 'regex:/^[0-9-]{10,17}$/'],
+            'isbn' => ['required', 'unique:books', new IsbnRule()],
         ]);
 
         $author = Author::firstOrCreate(
