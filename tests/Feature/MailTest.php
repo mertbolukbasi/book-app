@@ -2,7 +2,6 @@
 
 use App\Mail\BookCreatedMail;
 use Illuminate\Support\Facades\Mail;
-use App\Models\Book;
 use Database\Factories\BookFactory;
 
 test('Test mail', function () {
