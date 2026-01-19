@@ -40,7 +40,7 @@ class BookController extends Controller
     public function store(StoreAuthorRequest $request)
     {
         $request->validate([
-            'book_name' => ['required', 'unique:books'],
+            'book_name' => ['required', 'unique:books', 'max:255'],
             'bookstores' => 'array',
             'image' => 'image|mimes:jpg,png,jpeg|max:10240', // max 10gb, default jpg, jpeg, png, bmp, gif, or webp
             'isbn' => ['required', 'unique:books', 'regex:/^[0-9-]{10,17}$/'],
