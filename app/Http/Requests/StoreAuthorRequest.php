@@ -18,7 +18,7 @@ class StoreAuthorRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         $this->merge([
-            'author_name' => Str::of($this->author_name)
+            'authorName' => Str::of($this->authorName)
                 ->squish() // delete space
                 ->title()
                 ->trim()
@@ -34,7 +34,7 @@ class StoreAuthorRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'author_name' => ['required', 'string'],
+            'authorName' => ['required', 'string'],
         ];
     }
 }

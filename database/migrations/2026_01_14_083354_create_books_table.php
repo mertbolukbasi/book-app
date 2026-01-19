@@ -18,10 +18,10 @@ return new class extends Migration {
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->string('book_name')->unique();
+            $table->string('name')->unique();
             $table->string('image')->nullable(); // Default image can be used.
             $table->string('isbn')->unique();
-            $table->foreignId('author_id')->constrained()->onUpdate('cascade');
+            $table->foreignId('author_id')->constrained('authors')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

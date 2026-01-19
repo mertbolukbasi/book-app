@@ -12,32 +12,32 @@
                     @csrf
 
                     <div class="mb-3">
-                        <label for="book_name" class="form-label">Book Name</label>
-                        <input type="text" class="form-control @error('book_name') is-invalid @enderror" id="book_name" name="book_name" value="{{ old('book_name') }}" required>
-                        @error('book_name')
+                        <label for="name" class="form-label">Book Name</label>
+                        <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name') }}" required>
+                        @error('name')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="mb-3">
                         <label for="author" class="form-label">Author Name</label>
-                        <input type="text" 
-                               class="form-control @error('author_name') is-invalid @enderror" 
-                               id="author" 
-                               name="author_name" 
-                               list="author_list" 
-                               value="{{ old('author_name') }}" 
-                               required 
-                               autocomplete="off" 
+                        <input type="text"
+                               class="form-control @error('authorName') is-invalid @enderror"
+                               id="author"
+                               name="authorName"
+                               list="author_list"
+                               value="{{ old('authorName') }}"
+                               required
+                               autocomplete="off"
                                placeholder="Search author">
-                        
+
                         <datalist id="author_list">
                             @foreach($authors as $auth)
                                 <option value="{{ $auth->name }}">
                             @endforeach
                         </datalist>
 
-                        @error('author_name')
+                        @error('authorName')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -52,7 +52,7 @@
 
                     <div class="mb-3">
                         <label class="form-label d-block">Stores</label>
-                        
+
                         <div class="card p-3 @error('bookstores') border-danger @enderror">
                             @if($bookstores->isEmpty())
                                 <p class="text-muted small mb-0">No bookstores found in database.</p>
@@ -60,9 +60,9 @@
                                 <div class="d-flex flex-wrap gap-3">
                                     @foreach($bookstores as $store)
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" 
-                                                   name="bookstores[]" 
-                                                   value="{{ $store->id }}" 
+                                            <input class="form-check-input" type="checkbox"
+                                                   name="bookstores[]"
+                                                   value="{{ $store->id }}"
                                                    id="store_{{ $store->id }}"
                                                    {{ (is_array(old('bookstores')) && in_array($store->id, old('bookstores'))) ? 'checked' : '' }}
                                             >

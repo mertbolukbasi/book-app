@@ -10,10 +10,10 @@
                     <div class="card h-100">
                         @if($book->image)
                             <img src="{{ asset('storage/' . $book->image) }}" class="card-img-top"
-                                style="height: 250px; object-fit: contain" alt="{{ $book->book_name }}">
+                                style="height: 250px; object-fit: contain" alt="{{ $book->name }}">
                         @endif
                         <div class="card-body">
-                            <h5 class="card-title">{{ $book->book_name }}</h5>
+                            <h5 class="card-title">{{ $book->name }}</h5>
                             <p class="card-text">Author: {{ $book->author->name }}</p>
 
                             <p class="card-text">Mağazalar: {{ $book->bookstores->pluck('name')->implode(', ') }}</p>
@@ -36,7 +36,7 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            Are you sure you want to delete <strong>{{ $book->book_name }}</strong>?
+                                            Are you sure you want to delete <strong>{{ $book->name }}</strong>?
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary"

@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\BookCreatedMail;
+use App\Events\BookCreated;
+use App\Events\BookDeleted;
+use App\Events\BookUpdated;
 use App\Http\Requests\StoreAuthorRequest;
-use App\Mail\BookDeletedMail;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Bookstore;
 use App\Rules\IsbnRule;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Validation\Rule;
 use Storage;
 
@@ -41,35 +41,30 @@ class BookController extends Controller
     public function store(StoreAuthorRequest $request)
     {
         $request->validate([
-            'book_name' => ['required', 'unique:books', 'max:255'],
+            'name' => ['required', 'unique:books', 'max:255'],
             'bookstores' => 'array',
             'image' => 'image|mimes:jpg,png,jpeg|max:10240', // max 10gb, default jpg, jpeg, png, bmp, gif, or webp
             'isbn' => ['required', 'unique:books', new IsbnRule()],
         ]);
 
         $author = Author::firstOrCreate(
-            ['name' => $request->author_name],
+            ['name' => $request->authorName],
         );
 
         $book = new Book();
-        $book->book_name = $request->book_name;
+        $book->name = $request->name;
         $book->isbn = $request->isbn;
         $book->author_id = $author->id;
 
         if ($request->hasfile('image')) {
-            $image_path = $request->file('image')->store('images', 'public');
-            $book->image = $image_path;
+            $imagePath = $request->file('image')->store('images', 'public');
+            $book->image = $imagePath;
         }
 
         $book->save();
 
         $book->bookstores()->attach($request->bookstores);
-
-        $emails = $book->bookstores()->pluck('email')->toArray();
-
-        if (!empty($emails)) {
-            Mail::to($emails)->send(new BookCreatedMail($book));
-        }
+        event(new BookCreated($book));
 
         return redirect()->route('list');
     }
@@ -98,17 +93,17 @@ class BookController extends Controller
     public function update(StoreAuthorRequest $request, Book $book)
     {
         $request->validate([
-            'book_name' => ['required', Rule::unique('books', 'book_name')->ignore($book->id)],
+            'name' => ['required', Rule::unique('books', 'name')->ignore($book->id)],
             'bookstores' => 'array',
             'image' => 'image|mimes:jpg,png,jpeg|max:1024', // max 1gb, default jpg, jpeg, png, bmp, gif, or webp
-            'isbn' => ['required', Rule::unique('books', 'isbn')->ignore($book->id), 'regex:/^[0-9-]{10,17}$/'],
+            'isbn' => ['required', Rule::unique('books', 'isbn')->ignore($book->id), new IsbnRule()],
         ]);
 
         $author = Author::firstOrCreate(
-            ['name' => $request->author_name],
+            ['name' => $request->authorName],
         );
 
-        $book->book_name = $request->book_name;
+        $book->name = $request->name;
         $book->isbn = $request->isbn;
         $book->author_id = $author->id;
 
@@ -119,28 +114,12 @@ class BookController extends Controller
             $book->image = $request->file('image')->store('images', 'public');
         }
 
+        $oldStoreIds = $book->bookstores()->pluck('bookstores.id')->toArray();
+        $newStoreIds = $request->bookstores;
+
         $book->save();
-
-        $current_stores = $book->bookstores;
-        $new_stores = collect($request->bookstores)->pluck('name');
-        $removed_stores = $current_stores->whereNotIn('name', $new_stores);
-        $added_stores = $new_stores->diff($current_stores);
-
-        if ($removed_stores->isNotEmpty()) {
-            foreach ($removed_stores as $store) {
-                Mail::to($store->email)->send(new BookDeletedMail($book));
-            }
-        }
-
-        if ($added_stores->isNotEmpty()) {
-            $added_stores_models = Bookstore::whereIn('name', $added_stores)->get();
-
-            foreach ($added_stores_models as $added_stores_model) {
-                Mail::to($added_stores_model->email)->send(new BookCreatedMail($book));
-            }
-        }
-
         $book->bookstores()->sync($request->bookstores);
+        event(new BookUpdated($book, $oldStoreIds, $newStoreIds));
 
         return redirect()->route('list');
     }
@@ -153,7 +132,12 @@ class BookController extends Controller
         if ($book->image) {
             Storage::disk('public')->delete($book->image);
         }
+
+        $emails = $book->bookstores()->pluck('email')->toArray();
+        event(new BookDeleted($book, $emails));
+
         $book->delete();
+
         return redirect()->route('list');
     }
 }

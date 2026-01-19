@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Bookstore extends Model
 {
-    public function books(): BelongsToMany // sanirim donus tipi belirtmem gerekiyor ide warn verdi.
+    protected $fillable = [
+        'name',
+        'email',
+    ];
+
+    public function books(): BelongsToMany
     {
         return $this->belongsToMany(Book::class);
     }
-
-    protected $fillable = [
-        'name',
-    ];
 }

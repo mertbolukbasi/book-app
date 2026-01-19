@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>New Book Added!</title>
+    <title>{{ $book->name }} is on sale!</title>
 </head>
 <body>
-    <h1>Your book has been added</h1>
-    <p><strong>Book name:</strong> {{ $book->book_name }}</p>
+    <h1>Your book is on sale.</h1>
+    <p><strong>Book name:</strong> {{ $book->name }}</p>
     <p><strong>ISBN:</strong> {{ $book->isbn }}</p>
-    <p>Successfully saved.</p>
 </body>
 </html>

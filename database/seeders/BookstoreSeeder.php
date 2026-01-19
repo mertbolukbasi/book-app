@@ -17,19 +17,19 @@ class BookstoreSeeder extends Seeder
         $stores = [
             [
                 'name' => 'D&R',
-                'email' => 'bolukbasmert@hotmail.com',
+                'email' => 'dr@dr.com',
             ],
             [
                 'name' => 'Idefix',
-                'email' => 'bolukbasmertr2004@hotmail.com',
+                'email' => 'idefix@idefix.com',
             ],
             [
                 'name' => 'Hepsiburada',
-                'email' => 'mertbolukbasi144@hotmail.com',
+                'email' => 'hepsiburada@hepsiburada.com',
             ],
             [
                 'name' => 'Kitapyurdu',
-                'email' => 'kaizenium@kaizeniumfoundation.com',
+                'email' => 'kitapyurdu@kitapyurdu.com',
             ],
         ];
 
