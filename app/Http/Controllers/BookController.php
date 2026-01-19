@@ -43,6 +43,7 @@ class BookController extends Controller
         $request->validate([
             'name' => ['required', 'unique:books', 'max:255'],
             'bookstores' => 'array',
+            'bookstores.*' => 'integer|exists:bookstores,id',
             'image' => 'image|mimes:jpg,png,jpeg|max:10240', // max 10gb, default jpg, jpeg, png, bmp, gif, or webp
             'isbn' => ['required', 'unique:books', new IsbnRule()],
         ]);
