@@ -30,6 +30,7 @@ class AuthController extends Controller
         // TODO: Remember me field can be added.
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
+
             return redirect()->intended('/');
         }
 
@@ -62,6 +63,7 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
         return redirect('/');
     }
 }

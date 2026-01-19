@@ -1,8 +1,8 @@
 <?php
 
 use App\Mail\BookCreatedMail;
-use Illuminate\Support\Facades\Mail;
 use Database\Factories\BookFactory;
+use Illuminate\Support\Facades\Mail;
 
 test('Test mail', function () {
 

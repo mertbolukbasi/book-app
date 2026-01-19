@@ -26,20 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Event::listen(
-            BookCreated::class,
-            SendCreatedNotification::class
-        );
-
-        Event::listen(
-            BookUpdated::class,
-            SendUpdatedNotification::class
-        );
-
-        Event::listen(
-            BookDeleted::class,
-            SendDeletedNotification::class
-        );
-
+        //
     }
 }

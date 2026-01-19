@@ -7,7 +7,6 @@ use App\Mail\BookCreatedMail;
 use App\Mail\BookDeletedMail;
 use App\Models\Bookstore;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
 class SendUpdatedNotification implements ShouldQueue
@@ -30,7 +29,7 @@ class SendUpdatedNotification implements ShouldQueue
         $removedIds = array_diff($event->oldStoreIds, $event->newStoreIds);
         $addedIds = array_diff($event->newStoreIds, $event->oldStoreIds);
 
-        if (!empty($removedIds)) {
+        if (! empty($removedIds)) {
             $removedStores = Bookstore::whereIn('id', $removedIds)->get();
 
             foreach ($removedStores as $store) {
@@ -38,7 +37,7 @@ class SendUpdatedNotification implements ShouldQueue
             }
         }
 
-        if (!empty($addedIds)) {
+        if (! empty($addedIds)) {
             $addedStores = Bookstore::whereIn('id', $addedIds)->get();
 
             foreach ($addedStores as $store) {

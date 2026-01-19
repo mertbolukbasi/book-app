@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\BookDeleted;
 use App\Mail\BookDeletedMail;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
 class SendDeletedNotification
@@ -26,7 +24,7 @@ class SendDeletedNotification
         $book = $event->book;
         $emails = $event->emails;
 
-        if (!empty($emails)) {
+        if (! empty($emails)) {
             foreach ($emails as $email) {
                 Mail::to($email)->send(new BookDeletedMail($book));
             }

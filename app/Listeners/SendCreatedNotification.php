@@ -5,7 +5,6 @@ namespace App\Listeners;
 use App\Events\BookCreated;
 use App\Mail\BookCreatedMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
 
 class SendCreatedNotification implements ShouldQueue
@@ -28,7 +27,7 @@ class SendCreatedNotification implements ShouldQueue
         foreach ($emails as $email) {
             echo $email;
         }
-        if (!empty($emails)) {
+        if (! empty($emails)) {
             foreach ($emails as $email) {
                 Mail::to($email)->send(new BookCreatedMail($book));
             }

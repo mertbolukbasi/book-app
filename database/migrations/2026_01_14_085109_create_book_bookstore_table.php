@@ -5,7 +5,8 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 // php artisan make:migration
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
