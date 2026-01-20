@@ -47,14 +47,14 @@ class BookController extends Controller
             'bookstores' => 'array',
             'bookstores.*' => 'integer|exists:bookstores,id',
             'image' => 'image|mimes:jpg,png,jpeg|max:10240', // max 10gb, default jpg, jpeg, png, bmp, gif, or webp
-            'isbn' => ['required', 'unique:books', new IsbnRule()],
+            'isbn' => ['required', 'unique:books', new IsbnRule],
         ]);
 
         $author = Author::firstOrCreate(
             ['name' => $request->authorName],
         );
 
-        $book = new Book();
+        $book = new Book;
         $book->name = $request->name;
         $book->isbn = $request->isbn;
         $book->author_id = $author->id;
@@ -100,7 +100,7 @@ class BookController extends Controller
             'name' => ['required', Rule::unique('books', 'name')->ignore($book->id)],
             'bookstores' => 'array',
             'image' => 'image|mimes:jpg,png,jpeg|max:1024', // max 1gb, default jpg, jpeg, png, bmp, gif, or webp
-            'isbn' => ['required', Rule::unique('books', 'isbn')->ignore($book->id), new IsbnRule()],
+            'isbn' => ['required', Rule::unique('books', 'isbn')->ignore($book->id), new IsbnRule],
         ]);
 
         $author = Author::firstOrCreate(

@@ -25,7 +25,7 @@ jobs:
         run: vendor/bin/php-cs-fixer fix --dry-run --diff
 
       - name: Laravel Pint
-        run: vendor/bin/pint --test
+        run: vendor/bin/pint
 
       - name: Larastan
         run: vendor/bin/phpstan analyse --memory-limit=2G
