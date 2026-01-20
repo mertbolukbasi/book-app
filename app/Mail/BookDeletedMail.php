@@ -28,7 +28,7 @@ class BookDeletedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Book remove: '.$this->book->name,
+            subject: 'Book remove: ' . $this->book->name,
         );
     }
 

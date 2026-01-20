@@ -28,7 +28,7 @@ class BookCreatedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'New book added: '.$this->book->name,
+            subject: 'New book added: ' . $this->book->name,
         );
     }
 

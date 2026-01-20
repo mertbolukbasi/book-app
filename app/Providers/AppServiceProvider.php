@@ -2,13 +2,6 @@
 
 namespace App\Providers;
 
-use App\Events\BookCreated;
-use App\Events\BookDeleted;
-use App\Events\BookUpdated;
-use App\Listeners\SendCreatedNotification;
-use App\Listeners\SendDeletedNotification;
-use App\Listeners\SendUpdatedNotification;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
