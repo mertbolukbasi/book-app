@@ -1,4 +1,4 @@
-name: Fix Code Style
+name: Check Code Style
 
 on:
   push:
@@ -22,7 +22,7 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: PHP CS Fixer
-        run: vendor/bin/php-cs-fixer fix
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff
 
       - name: Laravel Pint
         run: vendor/bin/pint
