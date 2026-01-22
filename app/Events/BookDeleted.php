@@ -18,7 +18,8 @@ class BookDeleted
      * Create a new event instance.
      */
     public function __construct(
-        public Book $book,
+        public string $name,
+        public string $isbn,
         public array $emails
     ) {
         //

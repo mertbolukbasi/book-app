@@ -24,9 +24,6 @@ class SendCreatedNotification implements ShouldQueue
     {
         $book = $event->book;
         $emails = $book->bookstores->pluck('email')->toArray();
-        foreach ($emails as $email) {
-            echo $email;
-        }
         if (! empty($emails)) {
             foreach ($emails as $email) {
                 Mail::to($email)->send(new BookCreatedMail($book));

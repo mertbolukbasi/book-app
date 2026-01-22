@@ -99,6 +99,7 @@ class BookController extends Controller
         $request->validate([
             'name' => ['required', Rule::unique('books', 'name')->ignore($book->id)],
             'bookstores' => 'array',
+            'bookstores.*' => 'integer|exists:bookstores,id',
             'image' => 'image|mimes:jpg,png,jpeg|max:1024', // max 1gb, default jpg, jpeg, png, bmp, gif, or webp
             'isbn' => ['required', Rule::unique('books', 'isbn')->ignore($book->id), new IsbnRule()],
         ]);
@@ -119,7 +120,7 @@ class BookController extends Controller
         }
 
         $oldStoreIds = $book->bookstores()->pluck('bookstores.id')->toArray();
-        $newStoreIds = $request->bookstores;
+        $newStoreIds = $request->bookstores ?? [];
 
         $book->save();
         $book->bookstores()->sync($request->bookstores);
@@ -138,7 +139,7 @@ class BookController extends Controller
         }
 
         $emails = $book->bookstores()->pluck('email')->toArray();
-        event(new BookDeleted($book, $emails));
+        event(new BookDeleted($book->name, $book->isbn, $emails));
 
         $book->delete();
 

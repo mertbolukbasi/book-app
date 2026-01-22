@@ -4,9 +4,10 @@ namespace App\Listeners;
 
 use App\Events\BookDeleted;
 use App\Mail\BookDeletedMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Mail;
 
-class SendDeletedNotification
+class SendDeletedNotification implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -21,12 +22,13 @@ class SendDeletedNotification
      */
     public function handle(BookDeleted $event): void
     {
-        $book = $event->book;
+        $name = $event->name;
+        $isbn = $event->isbn;
         $emails = $event->emails;
 
         if (! empty($emails)) {
             foreach ($emails as $email) {
-                Mail::to($email)->send(new BookDeletedMail($book));
+                Mail::to($email)->send(new BookDeletedMail($name, $isbn, $emails));
             }
         }
     }

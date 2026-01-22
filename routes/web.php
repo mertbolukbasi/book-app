@@ -21,7 +21,7 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 /*
  * Logout
  */
-Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::resource('books', BookController::class)
     ->except(['index', 'show'])

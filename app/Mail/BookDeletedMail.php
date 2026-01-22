@@ -17,8 +17,10 @@ class BookDeletedMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(public Book $book)
-    {
+    public function __construct(
+        public string $name,
+        public string $isbn,
+    ) {
         //
     }
 
@@ -28,7 +30,7 @@ class BookDeletedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Book remove: ' . $this->book->name,
+            subject: 'Book remove: ' . $this->name,
         );
     }
 
@@ -37,7 +39,6 @@ class BookDeletedMail extends Mailable
      */
     public function content(): Content
     {
-        // TODO! Email delete content should be written.
         return new Content(
             view: 'emails.book_deleted',
         );

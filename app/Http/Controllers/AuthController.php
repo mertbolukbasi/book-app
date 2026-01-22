@@ -43,14 +43,14 @@ class AuthController extends Controller
     {
         $credentials = $request->validate([
             'name' => ['required', 'string', 'max:50'],
-            'email' => ['required', 'email'],
+            'email' => ['required', 'email', 'unique:users'],
             'password' => ['required'],
         ]);
 
         $new_user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => $request->password,
         ]);
 
         Auth::login($new_user);
