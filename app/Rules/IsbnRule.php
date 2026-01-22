@@ -14,7 +14,7 @@ class IsbnRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (! preg_match('/^[0-9-]{10,17}$/', $value)) {
+        if (! preg_match('/^(\d{10}|\d{13})$/', $value)) {
             $fail('Isbn format is not correct.');
         }
     }
