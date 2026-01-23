@@ -26,6 +26,11 @@
                                 <label class="form-label text-muted">Password</label>
                                 <input type="password" name="password" class="form-control form-control-lg" required>
                             </div>
+
+                            <div class="mb-4">
+                                <label class="form-label text-muted">Confirm Password</label>
+                                <input type="password" name="password_confirmation" class="form-control form-control-lg" required>
+                            </div>
                             <button type="submit" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">Sign in</button>
                         </form>
 
