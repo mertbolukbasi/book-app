@@ -28,7 +28,7 @@ class SendDeletedNotification implements ShouldQueue
 
         if (! empty($emails)) {
             foreach ($emails as $email) {
-                Mail::to($email)->send(new BookDeletedMail($name, $isbn, $emails));
+                Mail::to($email)->send(new BookDeletedMail($name, $isbn));
             }
         }
     }

@@ -33,7 +33,7 @@ class SendUpdatedNotification implements ShouldQueue
             $removedStores = Bookstore::whereIn('id', $removedIds)->get();
 
             foreach ($removedStores as $store) {
-                Mail::to($store->email)->send(new BookDeletedMail($book));
+                Mail::to($store->email)->send(new BookDeletedMail($book->name, $book->isbn));
             }
         }
 
