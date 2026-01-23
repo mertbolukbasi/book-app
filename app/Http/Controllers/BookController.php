@@ -123,7 +123,7 @@ class BookController extends Controller
         $newStoreIds = $request->bookstores ?? [];
 
         $book->save();
-        $book->bookstores()->sync($request->bookstores);
+        $book->bookstores()->sync($request->bookstores ?? []);
         event(new BookUpdated($book, $oldStoreIds, $newStoreIds));
 
         return redirect()->route('list');
