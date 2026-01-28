@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\AuthorImport;
+use App\Jobs\BookImport;
 use App\Models\Import;
 use Illuminate\Http\Request;
 
@@ -14,6 +15,11 @@ class ImportController extends Controller
     public function index()
     {
         return view('import');
+    }
+
+    public function indexBooks()
+    {
+        return view('import_books');
     }
 
     public function history()
@@ -28,7 +34,7 @@ class ImportController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => ['required', 'mimes:csv,xlsx,txt', 'max:1048000000'],
+            'file' => ['required', 'mimes:csv,xlsx,txt', 'max:1048576'],
         ]);
 
         $fileName = $request->file('file')->getClientOriginalName();
@@ -41,7 +47,25 @@ class ImportController extends Controller
         ]);
 
         AuthorImport::dispatch($history->id);
-        return back();
+        return redirect()->route('import.history');
+    }
+
+    public function storeBooks(Request $request)
+    {
+        $request->validate([
+            'file' => ['required', 'mimes:csv,xlsx,txt', 'max:1048576'],
+        ]);
+
+        $fileName = $request->file('file')->getClientOriginalName();
+        $path = $request->file('file')->storeAs('imports', $fileName);
+
+        $history = Import::create([
+            'path' => $path,
+            'status' => 'pending',
+        ]);
+
+        BookImport::dispatch($history->id);
+        return redirect()->route('import.history');
     }
 
     /**

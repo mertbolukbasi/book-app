@@ -7,7 +7,7 @@
 
             <div class="card shadow-sm">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">📂 Bulk Import Authors</h5>
+                    <h5 class="mb-0">📂 Bulk Import Books</h5>
                 </div>
 
                 <div class="card-body p-4">
@@ -32,7 +32,7 @@
                         </div>
                     @endif
 
-                    <form action="{{ route('import.store') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('import.books') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="mb-4">

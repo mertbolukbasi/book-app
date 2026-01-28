@@ -25,6 +25,10 @@
                         </li>
 
                         <li class="nav-item">
+                            <a class="nav-link" href="{{ route('import.books.index') }}">Import Book</a>
+                        </li>
+
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('import.history') }}">Import History</a>
                         </li>
 

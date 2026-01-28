@@ -3,19 +3,18 @@
 namespace App\Jobs;
 
 use App\Models\Import;
-use App\Pipes\CheckDuplicate;
-use App\Pipes\SaveAuthor;
-use App\Pipes\ValidateRow;
+use App\Pipes\SaveBook;
+use App\Pipes\ValidateBookRow;
 use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
-use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Storage;
 use Spatie\SimpleExcel\SimpleExcelReader;
 use Throwable;
 
-class AuthorImport implements ShouldQueue
+class BookImport implements ShouldQueue
 {
     use Queueable;
 
@@ -40,59 +39,56 @@ class AuthorImport implements ShouldQueue
         }
 
         $history->update([
-            'status' => 'processing',
+            'status' => 'processing'
         ]);
 
         $path = Storage::path($history->path);
-
         $reader = SimpleExcelReader::create($path);
-        $headers = $reader->getHeaders();
 
-        if (count($headers) !== 3 || $headers[0] !== 'name' || $headers[1] !== 'isbn' || $headers[2] !== 'author') {
+        $headers = $reader->getHeaders();
+        $expectedHeaders = ['name', 'isbn', 'author'];
+        if (count(array_diff($expectedHeaders, $headers)) > 0) {
             $history->update([
-                'status' => 'failed',
+                'status' => 'failed'
             ]);
             return;
         }
 
         $rows = $reader->getRows();
-
         $history->update([
-            'total_rows' => count($rows),
+            'total_rows' => count($rows)
         ]);
 
         try {
             $reader->getRows()->chunk(500)->each(function ($chunk) {
-                DB::transaction(function () use ($chunk, &$total) {
+                DB::transaction(function () use ($chunk) {
                     foreach ($chunk as $row) {
                         $data = [
                             'row' => $row,
                             'status' => 'pending',
                         ];
-
                         $result = app(Pipeline::class)
                             ->send($data)
                             ->through([
-                                ValidateRow::class,
-                                CheckDuplicate::class,
-                                SaveAuthor::class,
+                                ValidateBookRow::class,
+                                SaveBook::class,
                             ])
                             ->thenReturn();
 
                         if ($result['status'] !== 'success') {
-                            throw new Exception('Row failed');
+                            throw new Exception('Failed!');
                         }
                     }
                 });
-            });
 
+            });
             $history->update([
                 'status' => 'completed',
             ]);
 
         } catch (Throwable $e) {
             $history->update([
-                'status' => 'failed',
+                'status' => 'failed'
             ]);
         }
     }

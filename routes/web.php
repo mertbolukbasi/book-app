@@ -26,8 +26,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 Route::get('/import', [ImportController::class, 'index'])->name('import.index');
+Route::get('/import/books', [ImportController::class, 'indexBooks'])->name('import.books.index');
 Route::get('/history', [ImportController::class, 'history'])->name('import.history');
 Route::post('/import', [ImportController::class, 'store'])->name('import.store');
+Route::post('/import/books', [ImportController::class, 'storeBooks'])->name('import.books');
 
 Route::resource('books', BookController::class)
     ->except(['index', 'show'])
