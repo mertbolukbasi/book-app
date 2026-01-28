@@ -62,32 +62,35 @@ class AuthorImport implements ShouldQueue
         ]);
 
         try {
-            DB::transaction(function () use ($rows) {
-                $rows->each(function (array $rowProperties) {
-                    $data = [
-                        'row' => $rowProperties,
-                        'status' => 'pending',
-                    ];
+            $reader->getRows()->chunk(100)->each(function ($chunk) use (&$total) {
+                DB::transaction(function () use ($chunk, &$total) {
+                    foreach ($chunk as $row) {
+                        $data = [
+                            'row' => $row,
+                            'status' => 'pending',
+                        ];
 
-                    $result = app(Pipeline::class)
-                        ->send($data)
-                        ->through([
-                            ValidateRow::class,
-                            CheckDuplicate::class,
-                            SaveAuthor::class,
-                        ])
-                        ->then(function ($data) {
-                            return $data;
-                        });
+                        $result = app(Pipeline::class)
+                            ->send($data)
+                            ->through([
+                                ValidateRow::class,
+                                CheckDuplicate::class,
+                                SaveAuthor::class,
+                            ])
+                            ->thenReturn();
 
-                    if ($result['status'] !== 'success') {
-                        throw new Exception('Failed!');
+                        if ($result['status'] !== 'success') {
+                            throw new Exception('Row failed');
+                        }
+
+                        $total++;
                     }
                 });
             });
 
             $history->update([
                 'status' => 'completed',
+                'total_rows' => $total,
             ]);
 
         } catch (Throwable $e) {

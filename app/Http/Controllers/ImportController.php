@@ -28,7 +28,7 @@ class ImportController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => ['required', 'mimes:csv,xlsx,txt', 'max:20480'],
+            'file' => ['required', 'mimes:csv,xlsx,txt', 'max:1048000000'],
         ]);
 
         $fileName = $request->file('file')->getClientOriginalName();
