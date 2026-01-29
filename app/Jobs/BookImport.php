@@ -54,14 +54,12 @@ class BookImport implements ShouldQueue
             return;
         }
 
-        $rows = $reader->getRows();
-        $history->update([
-            'total_rows' => $rows->count(),
-        ]);
+        $totalRows = 0;
 
         try {
-            $reader->getRows()->chunk(500)->each(function ($chunk) {
-                DB::transaction(function () use ($chunk) {
+            $reader->getRows()->chunk(500)->each(function ($chunk) use (&$totalRows) {
+                DB::transaction(function () use ($chunk, &$totalRows) {
+                    $totalRows += $chunk->count();
                     foreach ($chunk as $row) {
                         $data = [
                             'row' => $row,
@@ -84,11 +82,13 @@ class BookImport implements ShouldQueue
             });
             $history->update([
                 'status' => 'completed',
+                'total_rows' => $totalRows,
             ]);
 
         } catch (Throwable $e) {
             $history->update([
                 'status' => 'failed',
+                'total_rows' => $totalRows,
             ]);
         }
     }

@@ -6,6 +6,7 @@ use App\Jobs\AuthorImport;
 use App\Jobs\BookImport;
 use App\Models\Import;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ImportController extends Controller
 {
@@ -56,7 +57,7 @@ class ImportController extends Controller
             'file' => ['required', 'mimes:csv,xlsx,txt', 'max:1048576'],
         ]);
 
-        $fileName = $request->file('file')->getClientOriginalName();
+        $fileName = Str::uuid() . '_' . $request->file('file')->getClientOriginalName();
         $path = $request->file('file')->storeAs('imports', $fileName);
 
         $history = Import::create([
