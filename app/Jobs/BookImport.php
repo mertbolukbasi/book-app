@@ -56,7 +56,7 @@ class BookImport implements ShouldQueue
 
         $rows = $reader->getRows();
         $history->update([
-            'total_rows' => count($rows),
+            'total_rows' => $rows->count(),
         ]);
 
         try {

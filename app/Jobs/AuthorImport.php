@@ -48,7 +48,7 @@ class AuthorImport implements ShouldQueue
         $reader = SimpleExcelReader::create($path);
         $headers = $reader->getHeaders();
 
-        if (count($headers) !== 3 || $headers[0] !== 'name' || $headers[1] !== 'isbn' || $headers[2] !== 'author') {
+        if (count($headers) !== 1 || $headers[0] !== 'name') {
             $history->update([
                 'status' => 'failed',
             ]);
@@ -58,7 +58,7 @@ class AuthorImport implements ShouldQueue
         $rows = $reader->getRows();
 
         $history->update([
-            'total_rows' => count($rows),
+            'total_rows' => $rows->count(),
         ]);
 
         try {

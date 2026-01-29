@@ -21,7 +21,7 @@
                     </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('import.store') }}">Import Author</a>
+                            <a class="nav-link" href="{{ route('import.index') }}">Import Author</a>
                         </li>
 
                         <li class="nav-item">
