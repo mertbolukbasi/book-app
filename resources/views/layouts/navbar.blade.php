@@ -20,6 +20,18 @@
                         <a class="nav-link" href="{{ route('books.create') }}">Add Book</a>
                     </li>
 
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('import.index') }}">Import Author</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('import.books.index') }}">Import Book</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('import.history') }}">Import History</a>
+                        </li>
+
                     <li class="nav-item">
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
