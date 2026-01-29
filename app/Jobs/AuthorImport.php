@@ -63,7 +63,7 @@ class AuthorImport implements ShouldQueue
 
         try {
             $reader->getRows()->chunk(500)->each(function ($chunk) {
-                DB::transaction(function () use ($chunk, &$total) {
+                DB::transaction(function () use ($chunk) {
                     foreach ($chunk as $row) {
                         $data = [
                             'row' => $row,
