@@ -46,7 +46,7 @@ class BookImport implements ShouldQueue
         $reader = SimpleExcelReader::create($path);
 
         $headers = $reader->getHeaders();
-        $expectedHeaders = ['name', 'isbn', 'author'];
+        $expectedHeaders = ['name', 'isbn', 'author', 'stores'];
         if (count(array_diff($expectedHeaders, $headers)) > 0) {
             $history->update([
                 'status' => 'failed'

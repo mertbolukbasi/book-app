@@ -2,6 +2,7 @@
 
 namespace App\Pipes;
 
+use App\Models\Bookstore;
 use App\Rules\IsbnRule;
 use Closure;
 use Illuminate\Support\Facades\Validator;
@@ -24,6 +25,7 @@ class ValidateBookRow
             'name' => ['required', 'string', 'max:255'],
             'author' => ['required', 'string'],
             'isbn' => ['required', 'unique:books,isbn', new IsbnRule()],
+            'stores' => ['required']
         ]);
 
         if ($validator->fails()) {
