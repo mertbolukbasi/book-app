@@ -39,7 +39,7 @@ class BookImport implements ShouldQueue
         }
 
         $history->update([
-            'status' => 'processing'
+            'status' => 'processing',
         ]);
 
         $path = Storage::path($history->path);
@@ -49,14 +49,14 @@ class BookImport implements ShouldQueue
         $expectedHeaders = ['name', 'isbn', 'author', 'stores'];
         if (count(array_diff($expectedHeaders, $headers)) > 0) {
             $history->update([
-                'status' => 'failed'
+                'status' => 'failed',
             ]);
             return;
         }
 
         $rows = $reader->getRows();
         $history->update([
-            'total_rows' => count($rows)
+            'total_rows' => count($rows),
         ]);
 
         try {
@@ -88,7 +88,7 @@ class BookImport implements ShouldQueue
 
         } catch (Throwable $e) {
             $history->update([
-                'status' => 'failed'
+                'status' => 'failed',
             ]);
         }
     }

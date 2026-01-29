@@ -25,7 +25,7 @@ class ValidateBookRow
             'name' => ['required', 'string', 'max:255'],
             'author' => ['required', 'string'],
             'isbn' => ['required', 'unique:books,isbn', new IsbnRule()],
-            'stores' => ['required']
+            'stores' => ['required'],
         ]);
 
         if ($validator->fails()) {

@@ -28,7 +28,7 @@ class SaveBook
         $book = Book::create([
             'name' => $row['name'],
             'isbn' => $row['isbn'],
-            'author_id' => $author->id
+            'author_id' => $author->id,
         ]);
 
         $storeNames = array_filter(array_map('trim', explode(',', $row['stores'])));
